@@ -4,7 +4,7 @@ module load modkit
 
 modkit pileup --bedgraph --ref /share/lasallelab/Oran/dovetail/luhmes/methylation/concats/hg38refGenome --log-filepath /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-3/NP4-3pileup.log --threads 20 --num-reads 100000 /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-3/NP4-3concat_sorted.bam /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-3 
 
-# Prints this scary message after the ghost in the shell finishes running
+# Prints this scary message after the ghost in the shell finishes running.  RIP: Zelda Rubinstein & Heather O'Rourke
 echo "
                                                      @@@@@@@@
                                              %&&&&@&          @@@@@(@&@&&#                                                             
