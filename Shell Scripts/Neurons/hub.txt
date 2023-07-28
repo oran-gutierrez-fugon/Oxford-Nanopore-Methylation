@@ -1,0 +1,5 @@
+hub LUHMES_Methylation_Neurons
+shortLabel LUHMES Methylation Neurons
+longLabel LUHMES Methylation positive strand 2 Neuron replicates
+genomesFile genomes.txt
+email  ojgutierrez@ucdavis.edu

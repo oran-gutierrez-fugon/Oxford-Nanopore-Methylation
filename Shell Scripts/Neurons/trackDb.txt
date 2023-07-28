@@ -1,0 +1,27 @@
+track LUHMES_Methylation_Neurons
+container multiWig
+shortLabel LUHMES  Methylation Neurons
+longLabel LUHMES  Methylation positive strand 2 Neuron replicates
+type bigWig 0 1
+viewLimits 0:1
+visibility full
+maxHeightPixels 200:150:10
+aggregate transparentOverlay
+showSubtrackColorOnUi on
+configurable on
+
+track NP4-3
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/hg19bigwig/NP4-3-m_positive_CC_N5_hg19_SM.bw
+shortLabel NP4-3
+longLabel LUHMES Neurons Passage 4 Replicate 3
+parent LUHMES_Methylation_Neurons
+type bigWig
+color 255,204,153
+
+track NP4-4
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/hg19bigwig/NP4-4-m_positive_CC_N5_hg19_SM.bw
+shortLabel NP4-4
+longLabel LUHMES Neurons Passage 4 Replicate 4
+parent LUHMES_Methylation_Neurons
+type bigWig
+color 255,255,102
