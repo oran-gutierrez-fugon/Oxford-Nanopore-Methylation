@@ -1,0 +1,43 @@
+track LUHMES_Methylation
+container multiWig
+shortLabel Dif + Undif
+longLabel Positive Strand CpG Methylation in Neurons & Undifferentiated LUHMES (2 replicates each)
+type bigWig 0 1
+viewLimits 0:1
+visibility full
+maxHeightPixels 200:150:10
+aggregate transparentOverlay
+showSubtrackColorOnUi on
+configurable on
+
+track NP4-3
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/hg19bigwig/NP4-3-m_positive_CC_N5_hg19_SM.bw
+shortLabel NP4-3
+longLabel LUHMES Neurons Passage 4 Replicate 3
+parent LUHMES_Methylation
+type bigWig
+color 255,204,153
+
+track NP4-4
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/hg19bigwig/NP4-4-m_positive_CC_N5_hg19_SM.bw
+shortLabel NP4-4
+longLabel LUHMES Neurons Passage 4 Replicate 4
+parent LUHMES_Methylation
+type bigWig
+color 255,255,102
+
+track UDP4-2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/hg19bigwig/UDP4-2-m_positive_CC_N5_hg19_SM.bw
+shortLabel UDP4-2
+longLabel LUHMES Undifferentiated Passage 4 Replicate 2
+parent LUHMES_Methylation
+type bigWig
+color 153,255,255
+
+track UDP4-3
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/hg19bigwig/UDP4-3-m_positive_CC_N5_hg19_SM.bw
+shortLabel UDP4-3
+longLabel LUHMES Undifferentiated Passage 4 Replicate 3
+parent LUHMES_Methylation
+type bigWig
+color 153,255,153
