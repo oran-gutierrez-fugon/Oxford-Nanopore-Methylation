@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/bash -v
 
-source activate clair3-1.0.4
+conda activate clair3-1.0.4
 module load samtools
 cd /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed
 
@@ -25,8 +25,7 @@ gunzip -c /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-3/
 
 #change and activate whatshap environment
 conda deactivate
-conda activate
-source activate /share/lasallelab/Oran/miniconda3/whatshap-env
+conda activate /share/lasallelab/Oran/miniconda3/whatshap-env
 module load samtools
 
 #phasing
