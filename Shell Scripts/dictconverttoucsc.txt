@@ -1,0 +1,44 @@
+###Create a dictionnary containing your match_table.txt
+match_dict={}
+###Open your match table
+with open("/share/lasallelab/Oran/dovetail/refgenomes/GCF_000001405.39_GRCh38.p13_assembly_report.chrnames", 'r') as match_f:
+    ###For each line, you create a key/value item in a dictionnary
+    for line in match_f:
+        gi_notation = line.rstrip().split("\t")[0]
+        chr_notation = line.rstrip().split("\t")[1]
+        ###Check if the key doesn't exist in the dictionnary
+        if gi_notation not in match_dict:
+            match_dict[gi_notation] = chr_notation
+        else:
+            print("Care, duplicate in matching_table.txt, on : "+str(gi_notation))
+
+###Open your vcf file
+new_vcf_file = open("NP4-3cpgCONVERTED.bed", "a")
+with open("NP4-3cpg.bed", 'r') as vcf_f:
+    ###Read it line by line
+    headers_chromosome = ""
+    for line in vcf_f:
+        ###Change VCF dictionnary headers
+        if line.startswith('##contig'):
+            ###Get chromosome name
+            headers_chromosome = line.split("=")[2].split(",")[0]
+        ###If your chromosome exist in your dictionnary
+        if headers_chromosome in match_dict:
+            ###Replace in chromosome name in line
+            line = line.replace(headers_chromosome, match_dict[headers_chromosome])
+        ###Skip metadata informations
+        if line[0] != '#':
+            ###Retrieve your chromosome for each line
+            current_chromosome = line.split("\t")[0]
+            ###If your chromosome exist in your dictionnary
+            if current_chromosome in match_dict:
+                ###Change the value of your chromosome
+                new_vcf_file.write(match_dict[current_chromosome]+"\t"+'\t'.join(line.split("\t")[1:]))
+                ###Your chromosome is not in your dictionnary (I write it as it is but you can do something else...)
+            else:
+                print("This chromosome is not in my matching_table.txt : "+str(current_chromosome))
+                new_vcf_file.write(line)
+        ###Write unchanged metadata
+        else:
+            new_vcf_file.write(line)
+new_vcf_file.close()

@@ -20,7 +20,11 @@ cd /share/lasallelab/Oran/nanopolish/f5c-v1.3
 ./f5c_x86_64_linux index -t 20 --iop 24 -d /share/lasallelab/Oran/dovetail/luhmes/nanoporeRAW/fast5/NP4-4/ /share/lasallelab/Oran/dovetail/luhmes/methylation/fastqconcats/NP4-4-cat.fastq.gz
 
 #cleans up any previous passed variants vcf to avoid downstream errors
-rm share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/*.*
+cd /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/
+rm /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/*.*
+rm -r /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/tmp
+rm -r /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/log
+
 
 #activates clair3 env and loads samtools
 conda activate clair3-1.0.4
@@ -32,7 +36,7 @@ run_clair3.sh --bam_fn=/share/lasallelab/Oran/dovetail/luhmes/methylation/fastqc
 #filters for passed quality
 gunzip -c /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/merge_output.vcf.gz | awk '$1 ~ /^#/ || $7=="PASS"' > /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/NP4-4-PassedVariants.vcf
 
-#Preps vcf file for whatshap with bgzip then tabix
+#indexes vcf file in prep for whatshap with bgzip then tabix
 conda deactivate
 conda activate /share/lasallelab/Oran/dovetail/luhmes/merged/oj
 bgzip -i /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/NP4-4-PassedVariants.vcf
@@ -42,10 +46,12 @@ tabix -p vcf /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4
 conda deactivate
 conda activate /share/lasallelab/Oran/miniconda3/whatshap-env
 
-#phasing with whatshap
-whatshap phase --ignore-read-groups --reference /share/lasallelab/Oran/dovetail/refgenomes/hg19bgzip/hg19.fa.gz -o /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/NP4-4-whatshap_phased.vcf /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/NP4-4-PassedVariants.vcf.gz /share/lasallelab/Oran/dovetail/luhmes/methylation/fastqconcats/NP4-4x-cat_sorted.bam
+#phasing with whatshap (reference must be uncompressed and indexed)
+whatshap phase --ignore-read-groups --reference /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa -o /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/NP4-4-whatshap_phased.vcf /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/NP4-4/clair3/NP4-4-PassedVariants.vcf.gz /share/lasallelab/Oran/dovetail/luhmes/methylation/fastqconcats/NP4-4x-cat_sorted.bam
 
-#methylation calling with f5c (more efficient program nanopolish)
+#methylation calling with f5c (more efficient program than nanopolish)
+cd /share/lasallelab/Oran/nanopolish/f5c-v1.3
+
 ./f5c_x86_64_linux call-methylation -t 20 -q cpg -r /share/lasallelab/Oran/dovetail/luhmes/methylation/fastqconcats/NP4-4-cat.fastq.gz -b share/lasallelab/Oran/dovetail/luhmes/methylation/fastqconcats/NP4-4x-cat_sorted.bam -g /share/lasallelab/Oran/dovetail/refgenomes/hg19bgzip/hg19.fa.gz > /share/lasallelab/Oran/dovetail/luhmes/methylation/fastqconcats/NP4-4-MethylationCall.tsv
 
 # Prints this scary message after the ghost in the shell finishes running.  RIP: Zelda Rubinstein & Heather O'Rourke
