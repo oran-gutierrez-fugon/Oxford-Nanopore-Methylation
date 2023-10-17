@@ -72,7 +72,7 @@ conda activate /share/lasallelab/Oran/miniconda3/whatshap-env
 #phasing with whatshap (reference must be uncompressed and indexed).  Since whatshap is not optimized for multicore this is a good step to do in parallel with other samples on the cluster after running clair3 separately or together with clair3 running for the next sample. May also substitute illumina variant vcf file if available. --indels option not needed in whatshap version > 2.0
 whatshap phase --ignore-read-groups --reference /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/UDP4-2-whatshap_phased.vcf /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/UDP4-2-PassedVariants.vcf.gz /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam
 
-#activates nanomethphase conda env and python step 1 methyl call processor + index (Thanks Osman!)
+#activates nanomethphase conda env and python step 1 methyl call processor + index. Must be in Nanomethphase folder (Thanks Osman!)
 conda deactivate
 conda activate /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase/nanometh-environment
 cd /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase
@@ -82,14 +82,28 @@ python nanomethphase.py methyl_call_processor -mc /share/lasallelab/Oran/dovetai
 python nanomethphase.py phase --include_indels -b /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam -v /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/UDP4-2-whatshap_phased.vcf -mc /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.bed.gz -r /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome -of bam,methylcall,bam2bis -t 60
 
 #aggregates data from both strands (requieres datamash installation)
-#use correct file names from previous step
+#use correct file names from previous step, differential methylation in next step does this automatically so can skip
+conda activate datamash
 sed '1d' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP1_MethylFrequency.tsv | awk -F'\t' '{if ($4=="-") {$2=$2-1;$3=$3-1}; print $1,$2,$3,$5,$6}' OFS='\t' | sort -k1,1 -k2,2n | datamash -g1,2,3 sum 4,5 | awk -F'\t' '{print $0,$5/$4}' OFS='\t' | sed '1i chromosome\tstart\tend\tNumOfAllCalls\tNumOfModCalls\tMethylFreq' > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/UDP4-2_aggregated_HP1_MethylFrequency.tsv
 
-#Differential methylation analysis (if you've made it this far, lets go a little farther)
-#Check folders and file names match with previous steps
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/UDP4-2_aggregated_HP1_MethylFrequency.tsv -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/UDP4-2_aggregated_HP2_MethylFrequency.tsv -o </share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/ -op DMA
+sed '1d' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP2_MethylFrequency.tsv | awk -F'\t' '{if ($4=="-") {$2=$2-1;$3=$3-1}; print $1,$2,$3,$5,$6}' OFS='\t' | sort -k1,1 -k2,2n | datamash -g1,2,3 sum 4,5 | awk -F'\t' '{print $0,$5/$4}' OFS='\t' | sed '1i chromosome\tstart\tend\tNumOfAllCalls\tNumOfModCalls\tMethylFreq' > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/UDP4-2_aggregated_HP2_MethylFrequency.tsv
 
-# Prints this scary message after the ghost in the shell finishes running.  Bonus points if you get the reference, RIP: Zelda Rubinstein & Heather O'Rourke
+#creates directory and cleans up previous dma tries
+mkdir /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA
+rm /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/*.*
+
+#If running script linearly will need to go back to nanomethphase conda env
+conda deactivate
+conda activate /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase/nanometh-environment
+cd /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase
+
+#Differential methylation analysis (if you've made it this far, lets go a little farther)
+#Check folders and file names match with previous steps but not datamash output since this will aggregate automatically
+#see DSS bioconductor ddocumentation for all options
+#Had to install sys for commandline R in nanomethphase env using R then install.packages("sys")
+python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP1_MethylFrequency.tsv -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP2_MethylFrequency.tsv -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/ -op DMA
+
+# Prints this scary message after the ghost in the shell finishes running so my lazy bones can see it finish from far away.  Bonus points if you can figure out the reference, RIP: Zelda Rubinstein & Heather O'Rourke
 echo "
                                                      @@@@@@@@
                                              %&&&&@&          @@@@@(@&@&&#                                                             
