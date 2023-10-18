@@ -35,13 +35,13 @@ f5c index -t 60 --slow5 /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/slow5/NP4
 
 #minimap2 aligment + samtools sam to bam + indexes bam
 minimap2 -a -x map-ont -t 60 -2 /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa.gz /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/catcat/NP4-4.fastq.gz | samtools sort -T tmp -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4_sorted.bam
-samtools index /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4_sorted.bam; echo "NP4-4 samtools index done title" | mail -s "NP4-4 samtools index done content" ojg333@gmail.com
+samtools index /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4_sorted.bam; echo "It is done.." | mail -s "NP4-4 samtools index done" ojg333@gmail.com
 
 #cleans up any previous methylation runs if needed
 #rm /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4-MethylationCall.tsv
 
 #methylation calling with f5c (more efficient program than nanopolish) must include option --pore r10 for r10 chemistry (thanks Logan!)
-f5c call-methylation --pore r10 -x hpc-high --meth-out-version 2 --slow5 /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/slow5/NP4-4/blow/NP4-4cat.blow5 -r /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/catcat/NP4-4.fastq.gz  -b /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4_sorted.bam -g /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4-MethylationCall.tsv; echo "NP4-4 f5c call-methylation done" | mail -s "NP4-4 f5c call-methylation done" ojg333@gmail.com
+f5c call-methylation --pore r10 -x hpc-high --meth-out-version 2 --slow5 /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/slow5/NP4-4/blow/NP4-4cat.blow5 -r /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/catcat/NP4-4.fastq.gz  -b /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4_sorted.bam -g /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4-MethylationCall.tsv; echo "It is done.." | mail -s "NP4-4 f5c call-methylation done" ojg333@gmail.com
 
 #cleans up any previous passed variants vcf to avoid mixed data errors
 #cd /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4/clair3/
@@ -103,7 +103,8 @@ cd /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase
 #Had to install sys for commandline R in nanomethphase env using R then install.packages("sys")
 python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4_methylome_NanoMethPhase_HP1_MethylFrequency.tsv -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4_methylome_NanoMethPhase_HP2_MethylFrequency.tsv -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-4/DMA/ -op DMA
 
-#Use NanoMethViz to visualize in R and enjoy! 
+#Use NanoMethViz to visualize in R and enjoy!
+To view directly in IGV will need to samtools index bam files for nanomethviz and washu epigenome browser use tabix
 
 # Prints this scary message after the ghost in the shell finishes running so my lazy bones can see it finish from far away.  Bonus points if you can figure out the reference, RIP: Zelda Rubinstein & Heather O'Rourke
 echo "
