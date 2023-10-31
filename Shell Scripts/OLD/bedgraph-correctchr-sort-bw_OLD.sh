@@ -21,5 +21,3 @@ LC_COLLATE=C sort -k1,1 -k2,2n -k3,3n -s /share/lasallelab/Oran/dovetail/luhmes/
 
 #changes to bigwig format *.bw*
 ./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/correctedhg19/NP4-3-m_positive_CC_N5_hg19_SM.bedgraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/concatenated/correctedhg19/NP4-3-m_positive_CC_N5_hg19_SM.bw
-
-
