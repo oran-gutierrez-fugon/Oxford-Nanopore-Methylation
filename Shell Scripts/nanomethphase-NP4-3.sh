@@ -102,9 +102,11 @@ cd /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase
 
 #Differential methylation analysis (if you've made it this far, lets go a little farther)
 #Check folders and file names match with previous steps but not datamash output since this will aggregate automatically
-#see DSS bioconductor ddocumentation for all options
+#see DSS ddocumentation for all options and output file format
 #Had to install sys for commandline R in nanomethphase env using R then install.packages("sys")
 python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3_methylome_NanoMethPhase_HP1_MethylFrequency.tsv -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3_methylome_NanoMethPhase_HP2_MethylFrequency.tsv -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/ -op DMA
+
+#Visualization for viewing in UCSC genome browser:
 
 #Converts output tsv files to bedgraph 4 column format (can take the read count column instead of methylation if want to make a coverage plot track)
 awk 'BEGIN {FS="\t"; OFS="\t"}
@@ -129,7 +131,21 @@ cd /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed
 
 ./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/NP4-3_HP2_MethylFrequency_sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/NP4-3_HP2_MethylFrequency.bw
 
-#To view just sftp upload to bioshare, copy link, and create track hub on UCSC genome browser 
+#Visualization of Differential Methylation Analysis
+#Convert space delimited txt callDMR file to tab delimited bedGraph with the percent value being converted to whole numbers by multiplying by 100
+awk 'BEGIN {FS=" "; OFS="\t"}
+NR > 1 {print $1, $2, $3, $7*100}' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/DMA_callDMR.txt > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph
+
+#sorts bedgraph with bedSort
+./bedSort /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph
+#still errored and executed this command but might be able to just do this sort and not bedSort first, still getting error
+sort -k1,1 -k2,2n /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph
+
+#Changes to bigwig format (.bw) for fast viewing in UCSC genome browser
+./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_H1vH2.bw
+
+
+#To view bw files just upload to bioshare, copy link, and create track hub on UCSC genome browser 
 
 # Prints this scary message after the ghost in the shell finishes running so my lazy bones can see it finish from far away.  Bonus points if you can figure out the reference, RIP: Zelda Rubinstein & Heather O'Rourke
 echo "

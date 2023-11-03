@@ -4,6 +4,9 @@
 
 #Although this is structured as a shell script I would recommend each section to be run individually to deal with errors as they arise. Also ran into issues switching between conda env and some steps are only included to clean up previous attempts.
 
+#Generally have not seen any part of this pipeline taking up more than 12 GB of memory with 60 cores going at a time but to be safe and respect epigenerate use the this command to limit ram usuage before killing the job at 75GB. Core usage options will vary with resorces available on epigenerate at the time of running.
+ulimit -v 75000000
+
 #load modules samtool and minimap
 module load samtools
 module load minimap2/2.24
@@ -35,13 +38,13 @@ f5c index -t 60 --slow5 /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/slow5/UDP
 
 #minimap2 aligment + samtools sam to bam + indexes bam
 minimap2 -a -x map-ont -t 60 -2 /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa.gz /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/catcat/UDP4-2.fastq.gz | samtools sort -T tmp -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam
-samtools index /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam; echo "UDP4-2 samtools index done title" | mail -s "UDP4-2 samtools index done content" ojg333@gmail.com
+samtools index /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam; echo "It is done.." | mail -s "UDP4-2 samtools index done" ojg333@gmail.com
 
 #cleans up any previous methylation runs if needed
 #rm /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.tsv
 
 #methylation calling with f5c (more efficient program than nanopolish) must include option --pore r10 for r10 chemistry (thanks Logan!)
-f5c call-methylation --pore r10 -x hpc-high --meth-out-version 2 --slow5 /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/slow5/UDP4-2/blow/UDP4-2cat.blow5 -r /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/catcat/UDP4-2.fastq.gz  -b /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam -g /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.tsv; echo "UDP4-2 f5c call-methylation done" | mail -s "UDP4-2 f5c call-methylation done" ojg333@gmail.com
+f5c call-methylation --pore r10 -x hpc-high --meth-out-version 2 --slow5 /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/slow5/UDP4-2/blow/UDP4-2cat.blow5 -r /share/lasallelab/Oran/dovetail/luhmes/nanoRAW/catcat/UDP4-2.fastq.gz  -b /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam -g /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.tsv; echo "It is done.." | mail -s "UDP4-2 f5c call-methylation done" ojg333@gmail.com
 
 #cleans up any previous passed variants vcf to avoid mixed data errors
 #cd /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/
@@ -69,7 +72,7 @@ tabix -p vcf /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/c
 conda deactivate
 conda activate /share/lasallelab/Oran/miniconda3/whatshap-env
 
-#phasing with whatshap (reference must be uncompressed and indexed).  Since whatshap is not optimized for multicore this is a good step to do in parallel with other samples on the cluster after running clair3 separately or together with clair3 running for the next sample. May also substitute illumina variant vcf file if available. --indels option not needed in whatshap version > 2.0
+#phasing with whatshap (reference must be uncompressed and indexed).  Since whatshap is not optimized for multicore this is a good step to do in parallel with other samples on the cluster after running clair3 separately or together with clair3 running for the next sample. May also substitute illumina variant vcf file if available.
 whatshap phase --ignore-read-groups --reference /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/UDP4-2-whatshap_phased.vcf /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/UDP4-2-PassedVariants.vcf.gz /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam
 
 #activates nanomethphase conda env and python step 1 methyl call processor + index. Must be in Nanomethphase folder (Thanks Osman!)
@@ -79,7 +82,7 @@ cd /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase
 python nanomethphase.py methyl_call_processor -mc /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.tsv -t 60 | sort -k1,1 -k2,2n -k3,3n | bgzip > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.bed.gz && tabix -p bed /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.bed.gz
 
 #phases the methylome (the moment you've all been waiting for)
-python nanomethphase.py phase --include_indels -b /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam -v /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/UDP4-2-whatshap_phased.vcf -mc /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.bed.gz -r /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome -of bam,methylcall,bam2bis -t 60
+python nanomethphase.py phase --include_indels -b /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_sorted.bam -v /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/clair3/UDP4-2-whatshap_phased.vcf -mc /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2-MethylationCall.bed.gz -r /share/lasallelab/Oran/dovetail/refgenomes/hg19.fa -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome -of bam,methylcall,bam2bis -t 50
 
 #aggregates data from both strands (requieres datamash installation)
 #use correct file names from previous step, differential methylation in next step does this automatically so can skip
@@ -102,6 +105,33 @@ cd /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase
 #see DSS bioconductor ddocumentation for all options
 #Had to install sys for commandline R in nanomethphase env using R then install.packages("sys")
 python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP1_MethylFrequency.tsv -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP2_MethylFrequency.tsv -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/ -op DMA
+
+#Visualization for viewing in UCSC genome browser:
+
+#Converts output tsv files to bedgraph 4 column format (can take the read count column instead of methylation if want to make a coverage plot track)
+awk 'BEGIN {FS="\t"; OFS="\t"}
+NR > 1 {print $1, $2, $3, $7*100}' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP1_MethylFrequency.tsv > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP1_MethylFrequency.bedGraph
+
+awk 'BEGIN {FS="\t"; OFS="\t"}
+NR > 1 {print $1, $2, $3, $7*100}' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP2_MethylFrequency.tsv > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP2_MethylFrequency.bedGraph
+
+#For combining replicates from begraphs (Not recommended since can show both replicates overlayed using trackhubs)
+#cat replicate1.bedGraph replicate2.bedGraph | sort -k1,1 -k2,2n > combined_sorted.bedGraph
+
+#Changes directory to where bedGraphToBigWig binaries can be run
+cd /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed
+
+#sorts bedgraph with bedSort
+./bedSort /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP1_MethylFrequency.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP1_MethylFrequency_sorted.bedGraph
+
+./bedSort /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP2_MethylFrequency.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP2_MethylFrequency_sorted.bedGraph
+
+#Changes to bigwig format (.bw) for fast viewing in UCSC genome browser
+./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP1_MethylFrequency_sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP1_MethylFrequency.bw
+
+./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP2_MethylFrequency_sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP2_MethylFrequency.bw
+
+#To view bw files just upload to bioshare, copy link, and create track hub on UCSC genome browser 
 
 # Prints this scary message after the ghost in the shell finishes running so my lazy bones can see it finish from far away.  Bonus points if you can figure out the reference, RIP: Zelda Rubinstein & Heather O'Rourke
 echo "

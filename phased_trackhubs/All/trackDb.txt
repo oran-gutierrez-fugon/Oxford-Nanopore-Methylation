@@ -1,0 +1,75 @@
+track LUHMES_Methylation_Phased
+container multiWig
+shortLabel Phased Methylation
+longLabel LUHMES phased methylation aggregated strands 
+type bigWig 0 1
+viewLimits 0:1
+visibility full
+maxHeightPixels 200:150:10
+aggregate transparentOverlay
+showSubtrackColorOnUi on
+configurable on
+
+track NP4-3_Haplotype_1
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-3/NP4-3_HP1_MethylFrequency.bw
+shortLabel NP4-3-HP1
+longLabel LUHMES Neurons Passage 4 Replicate 3 Haplotype 1
+parent LUHMES_Methylation_Phased
+type bigWig
+color 255,0,0
+
+track NP4-3_Haplotype_2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-3/NP4-3_HP2_MethylFrequency.bw
+shortLabel NP4-3-HP2
+longLabel LUHMES Neurons Passage 4 Replicate 3 Haplotype 2
+parent LUHMES_Methylation_Phased
+type bigWig
+color 255,69,0
+
+track NP4-4_Haplotype_1
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-4/NP4-4_HP1_MethylFrequency.bw
+shortLabel NP4-4-HP1
+longLabel LUHMES Undifferentiated Passage 4 Replicate 4 Haplotype 1
+parent LUHMES_Methylation_Phased
+type bigWig
+color 255,140,0
+
+track NP4-4_Haplotype_2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-4/NP4-4_HP2_MethylFrequency.bw
+shortLabel NP4-4-HP2
+longLabel LUHMES Undifferentiated Passage 4 Replicate 4 Haplotype 2
+parent LUHMES_Methylation_Phased
+type bigWig
+color 255,0,255
+
+track UDP4-2_Haplotype_1
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-2/UDP4-2_HP1_MethylFrequency.bw
+shortLabel UDP4-2-HP1
+longLabel LUHMES Undifferentiated Passage 4 Replicate 2 Haplotype 1
+parent LUHMES_Methylation_Phased
+type bigWig
+color 255,109,180
+
+track UDP4-2_Haplotype_2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-2/UDP4-2_HP2_MethylFrequency.bw
+shortLabel UDP4-2-HP2
+longLabel LUHMES Undifferentiated Passage 4 Replicate 2 Haplotype 2
+parent LUHMES_Methylation_Phased
+type bigWig
+color 230,230,250
+
+track UDP4-3_Haplotype_1
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-3/UDP4-3_HP1_MethylFrequency.bw
+shortLabel UDP4-3-HP1
+longLabel LUHMES Undifferentiated Passage 4 Replicate 3 Haplotype 1
+parent LUHMES_Methylation_Phased
+type bigWig
+color 128,0,128
+
+track UDP4-3_Haplotype_2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-3/UDP4-3_HP2_MethylFrequency.bw
+shortLabel UDP4-3-HP2
+longLabel LUHMES Undifferentiated Passage 4 Replicate 3 Haplotype 2
+parent LUHMES_Methylation_Phased
+type bigWig
+color 75,0,130
