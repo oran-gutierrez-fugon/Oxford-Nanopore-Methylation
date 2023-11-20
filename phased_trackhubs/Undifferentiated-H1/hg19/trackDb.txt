@@ -1,0 +1,27 @@
+track LUHMES_Methylation_Undifferentiated_Haplotype_1
+container multiWig
+shortLabel Paternal Undifferentiated
+longLabel Methylation on Paternal allele in Undifferentiated LUHMES 2 replicates stacked
+type bigWig 0 1
+viewLimits 0:1
+visibility full
+maxHeightPixels 200:150:10
+aggregate transparentOverlay
+showSubtrackColorOnUi on
+configurable on
+
+track UDP4-2_Haplotype_1
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-2/UDP4-2_HP1_MethylFrequency.bw
+shortLabel UDP4-2-HP1
+longLabel LUHMES Undifferentiated Passage 4 Replicate 2 Haplotype 1
+parent LUHMES_Methylation_Undifferentiated_Haplotype_1
+type bigWig
+color 102,102,255
+
+track UDP4-3_Haplotype_1
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-3/UDP4-3_HP1_MethylFrequency.bw
+shortLabel UDP4-3-HP1
+longLabel LUHMES Undifferentiated Passage 4 Replicate 3 Haplotype 1
+parent LUHMES_Methylation_Undifferentiated_Haplotype_1
+type bigWig
+color 255,102,255

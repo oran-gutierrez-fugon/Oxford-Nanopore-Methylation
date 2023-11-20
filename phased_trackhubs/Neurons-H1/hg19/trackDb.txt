@@ -1,7 +1,7 @@
 track LUHMES_Methylation_Neurons_Haplotype_1
 container multiWig
-shortLabel Methylation Neurons H-1
-longLabel LUHMES Neurons Haplotype-1 methylation 2 replicates stacked
+shortLabel Maternal Neurons
+longLabel Methylation on Maternal allele in LUHMES Neurons 2 replicates stacked
 type bigWig 0 1
 viewLimits 0:1
 visibility full
@@ -16,7 +16,7 @@ shortLabel NP4-3-HP1
 longLabel LUHMES Neurons Passage 4 Replicate 3 Haplotype 1
 parent LUHMES_Methylation_Neurons_Haplotype_1
 type bigWig
-color 255,0,0
+color 255,69,0
 
 track NP4-4_Haplotype_1
 bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-4/NP4-4_HP1_MethylFrequency.bw

@@ -1,0 +1,46 @@
+(nanometh-environment) NanoMethPhase$ python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-3_methylome_NanoMethPhase_HP1_MethylFrequency.tsv -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-3_methylome_NanoMethPhase_HP2_MethylFrequency.tsv -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-3/DMA/ -op DMA
+
+Warning messages:
+1: package 'R.utils' was built under R version 4.0.5
+2: package 'R.oo' was built under R version 4.0.5
+3: package 'R.methodsS3' was built under R version 4.0.5
+Warning message:
+package 'matrixStats' was built under R version 4.0.5
+[1] "######################################################################################################################"
+[1] "DSS version: 2.36.0"
+[1] "DSS Arguments:"
+[1] "Case:"
+[1] "/share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-3/DMA/DMA_ReadyForDSS_case1.tsv"
+[1] "Control:"
+[1] "/share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-3/DMA/DMA_ReadyForDSS_control1.tsv"
+[1] "Output:"
+[1] "/share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-3/DMA/DMA"
+[1] "dis.merge (dis_merge):"
+[1] "100"
+[1] "minlen"
+[1] "100"
+[1] "minCG"
+[1] "15"
+[1] "smoothing.span (smoothing_span)"
+[1] "500"
+[1] "smoothing (smoothing_flag)"
+[1] "TRUE"
+[1] "p.threshold (pval_cutoff)"
+[1] "0.001"
+[1] "delta (delta_cutoff)"
+[1] "0"
+[1] "pct.sig (pct_sig)"
+[1] "0.5"
+[1] "equal.disp (equal_disp)"
+[1] "FALSE"
+[1] "######################################################################################################################"
+[1] "reading files"
+[1] "DMA process started"
+Smoothing ...
+Estimating dispersion for each CpG site, this will take a while ...
+  |======================================================================| 100%
+
+  |======================================================================| 100%
+
+Computing test statistics ...
+(nanometh-environment) NanoMethPhase$

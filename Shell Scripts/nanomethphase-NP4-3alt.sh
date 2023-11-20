@@ -156,16 +156,16 @@ awk -F'\t' -v OFS='\t' '{ if ($4 > 0) $4 = -$4; else if ($4 < 0) $4 = -$4; print
 
 
 #Performs DMA with both Neuron replicates comparing Paternal (Case) to Maternal (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat/DMA/ -op DMA
+python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat/DMA/ -op DMA_N_PvM
 
 #Performs DMA with both Undifferentiated replicates comparing Paternal (Case) to Maternal (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat/DMA/ -op DMA
+python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat/DMA/ -op DMA_U_PvM
 
 #Performs DMA with both Neurons and Undifferentiated replicates comparing Paternal Neurons(Case) to Paternal Undifferentiated (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/DMA_NvUpat/ -op DMA
+python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/DMA_NvUpat/ -op DMA_NvU_P
 
 #Performs DMA with both Neurons and Undifferentiated replicates comparing Maternal Neurons(Case) to Maternal Undifferentiated (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsMat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/DMA_NvUmat -op DMA
+python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsMat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/DMA_NvUmat -op DMA_NvU_M
 
 #To view bw files just upload to bioshare, copy link, and create track hub on UCSC genome browser 
 

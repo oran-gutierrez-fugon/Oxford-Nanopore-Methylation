@@ -1,0 +1,5 @@
+hub Undifferentiated_LUHMES_DMA
+shortLabel Undifferentiated LUHMES DMA
+longLabel Differential Methylation Analysis Paternal vs Maternal Undifferentiated LUHMES 2 replicates stacked
+genomesFile genomes.txt
+email  ojgutierrez@ucdavis.edu

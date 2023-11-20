@@ -1,0 +1,27 @@
+track LUHMES_Neurons_DMA
+container multiWig
+shortLabel Neurons PvM
+longLabel Differential Methylation Analysis Paternal vs Maternal LUHMES Neurons 2 replicates stacked
+type bigWig 0 1
+viewLimits 0:1
+visibility full
+maxHeightPixels 200:150:10
+aggregate transparentOverlay
+showSubtrackColorOnUi on
+configurable on
+
+track DMA_Paternal_vs_Maternal_NP4-3
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-3/NP4-3_callDMR_Sorted.bw
+shortLabel DMA_NP4-3
+longLabel Neurons Differential Methylation Analysis Paternal vs Maternal Passage 4 Replicate 3
+parent LUHMES_Neurons_DMA
+type bigWig
+color 51,51,255
+
+track DMA_Paternal_vs_Maternal_NP4-4
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-4/NP4-4_callDMR_Sorted.bw
+shortLabel DMA_NP4-3
+longLabel Neurons Differential Methylation Analysis Paternal vs Maternal Passage 4 Replicate 4
+parent LUHMES_Neurons_DMA
+type bigWig
+color 153,51,255

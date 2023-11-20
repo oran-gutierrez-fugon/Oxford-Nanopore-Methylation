@@ -1,0 +1,5 @@
+hub LUHMES_Methylation_Undifferentiated_Haplotype_2
+shortLabel Methylation Undifferentiated H-2
+longLabel LUHMES Undifferentiated Haplotype-2 methylation 2 replicates stacked
+genomesFile genomes.txt
+email  ojgutierrez@ucdavis.edu

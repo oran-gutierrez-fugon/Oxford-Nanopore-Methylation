@@ -1,0 +1,5 @@
+hub LUHMES_Methylation_Neurons_Haplotype_1
+shortLabel Methylation Neurons H-1
+longLabel LUHMES Neurons Haplotype-1 methylation 2 replicates stacked
+genomesFile genomes.txt
+email  ojgutierrez@ucdavis.edu

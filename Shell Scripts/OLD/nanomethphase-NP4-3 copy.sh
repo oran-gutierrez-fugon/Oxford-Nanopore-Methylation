@@ -2,7 +2,7 @@
 
 #Author: Oran Gutierrez Fugon MD PhD, LaSalle Lab, Segal Lab, Integrative Genetics and Genomics graduate group UC Davis
 
-#Although this is structured as a shell script I would recommend each section to be run individually to deal with errors as they arise. Also ran into issues switching between conda env while using screen and some steps are only included to clean up previous attempts and may not be necessary.
+#Although this is structured as a shell script I would recommend each section to be run individually to deal with errors as they arise. Also ran into issues switching between conda env and some steps are only included to clean up previous attempts.
 
 #Generally have not seen any part of this pipeline taking up more than 12 GB of memory with 60 cores going at a time but to be safe and respect epigenerate use the this command to limit ram usuage before killing the job at 75GB. Core usage options will vary with resorces available on epigenerate at the time of running.
 ulimit -v 75000000
@@ -131,41 +131,19 @@ cd /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed
 
 ./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/NP4-3_HP2_MethylFrequency_sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/NP4-3_HP2_MethylFrequency.bw
 
-
 #Visualization of Differential Methylation Analysis
 #Convert space delimited txt callDMR file to tab delimited bedGraph with the percent value being converted to whole numbers by multiplying by 100
-
-rm /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph
-rm /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph
-
-#Converts output DMA txt files to bedgraph 4 column format (can take the read count column instead of methylation if want to make a coverage plot track)
-awk 'BEGIN {FS="\t"; OFS="\t"}
-NR > 1 {print $1, $2, $3, $8*100}' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/DMA_callDMR.txt > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph
-
-
-cd /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed
+awk 'BEGIN {FS=" "; OFS="\t"}
+NR > 1 {print $1, $2, $3, $7*100}' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/DMA_callDMR.txt > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph
 
 #sorts bedgraph with bedSort
 ./bedSort /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph
-
-#For neurons NP4-3 and NP4-4 since haplotype 1 is maternal but want to standardize with undifferentiated and always have DMA as Paternal vs Maternal this code flips the negative and positive values
-awk -F'\t' -v OFS='\t' '{ if ($4 > 0) $4 = -$4; else if ($4 < 0) $4 = -$4; print }' input.bedGraph > output.bedGraph
+#still errored and executed this command but might be able to just do this sort and not bedSort first, still getting error
+sort -k1,1 -k2,2n /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR.bedGraph > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph
 
 #Changes to bigwig format (.bw) for fast viewing in UCSC genome browser
-./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bw
+./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_Sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/DMA/NP4-3_callDMR_H1vH2.bw
 
-
-#Performs DMA with both Neuron replicates comparing Paternal (Case) to Maternal (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat/DMA/ -op DMA
-
-#Performs DMA with both Undifferentiated replicates comparing Paternal (Case) to Maternal (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat/DMA/ -op DMA
-
-#Performs DMA with both Neurons and Undifferentiated replicates comparing Paternal Neurons(Case) to Paternal Undifferentiated (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsPat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifPat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/DMA_NvUpat/ -op DMA
-
-#Performs DMA with both Neurons and Undifferentiated replicates comparing Maternal Neurons(Case) to Maternal Undifferentiated (Control)
-python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NeuronsMat -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UndifMat -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/DMA_NvUmat -op DMA
 
 #To view bw files just upload to bioshare, copy link, and create track hub on UCSC genome browser 
 

@@ -1,0 +1,5 @@
+hub LUHMES_Maternal_Neurons_DMA
+shortLabel Maternal Neurons DMA
+longLabel Differential Methylation Analysis Paternal vs Maternal LUHMES Neurons
+genomesFile genomes.txt
+email  ojgutierrez@ucdavis.edu

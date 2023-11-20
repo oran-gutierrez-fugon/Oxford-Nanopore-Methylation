@@ -1,0 +1,27 @@
+track LUHMES_Methylation_Neurons_Haplotype_2
+container multiWig
+shortLabel Paternal Neurons
+longLabel Methylation on Paternal allele in LUHMES Neurons 2 replicates stacked
+type bigWig 0 1
+viewLimits 0:1
+visibility full
+maxHeightPixels 200:150:10
+aggregate transparentOverlay
+showSubtrackColorOnUi on
+configurable on
+
+track NP4-3_Haplotype_2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-3/NP4-3_HP2_MethylFrequency.bw
+shortLabel NP4-3-HP2
+longLabel LUHMES Neurons Passage 4 Replicate 3 Haplotype 2
+parent LUHMES_Methylation_Neurons_Haplotype_2
+type bigWig
+color 51,51,255
+
+track NP4-4_Haplotype_2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/NP4-4/NP4-4_HP2_MethylFrequency.bw
+shortLabel NP4-4-HP2
+longLabel LUHMES Undifferentiated Passage 4 Replicate 4 Haplotype 2
+parent LUHMES_Methylation_Neurons_Haplotype_2
+type bigWig
+color 153,51,255

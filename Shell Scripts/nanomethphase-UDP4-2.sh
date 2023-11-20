@@ -2,7 +2,7 @@
 
 #Author: Oran Gutierrez Fugon MD PhD, LaSalle Lab, Segal Lab, Integrative Genetics and Genomics graduate group UC Davis
 
-#Although this is structured as a shell script I would recommend each section to be run individually to deal with errors as they arise. Also ran into issues switching between conda env and some steps are only included to clean up previous attempts.
+#Although this is structured as a shell script I would recommend each section to be run individually to deal with errors as they arise. Also ran into issues switching between conda env while using screen and some steps are only included to clean up previous attempts and may not be necessary.
 
 #Generally have not seen any part of this pipeline taking up more than 12 GB of memory with 60 cores going at a time but to be safe and respect epigenerate use the this command to limit ram usuage before killing the job at 75GB. Core usage options will vary with resorces available on epigenerate at the time of running.
 ulimit -v 75000000
@@ -102,7 +102,7 @@ cd /share/lasallelab/Oran/test_nanomethphase/NanoMethPhase
 
 #Differential methylation analysis (if you've made it this far, lets go a little farther)
 #Check folders and file names match with previous steps but not datamash output since this will aggregate automatically
-#see DSS bioconductor ddocumentation for all options
+#see DSS ddocumentation for all options and output file format
 #Had to install sys for commandline R in nanomethphase env using R then install.packages("sys")
 python nanomethphase.py dma -c 1,2,4,5,7 -ca /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP1_MethylFrequency.tsv -co /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2_methylome_NanoMethPhase_HP2_MethylFrequency.tsv -o /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/ -op DMA
 
@@ -130,6 +130,28 @@ cd /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed
 ./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP1_MethylFrequency_sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP1_MethylFrequency.bw
 
 ./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP2_MethylFrequency_sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/bedgraphs/UDP4-2_HP2_MethylFrequency.bw
+
+
+#Visualization of Differential Methylation Analysis (DMA)
+#Convert space delimited txt callDMR file to tab delimited bedGraph with column 8 converted to percent by multiplying times 100
+
+rm /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/UDP4-2_callDMR.bedGraph
+rm /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/UDP4-2_callDMR_Sorted.bedGraph
+
+#Converts output DMA txt files to bedgraph 4 column format (can take the read count column instead of methylation if want to make a coverage plot track)
+awk 'BEGIN {FS="\t"; OFS="\t"}
+NR > 1 {print $1, $2, $3, $8*100}' /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/DMA_callDMR.txt > /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/UDP4-2_callDMR.bedGraph
+
+
+cd /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed
+
+#sorts bedgraph with bedSort
+./bedSort /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/UDP4-2_callDMR.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/UDP4-2_callDMR_Sorted.bedGraph
+
+
+#Changes to bigwig format (.bw) for fast viewing in UCSC genome browser
+./bedGraphToBigWig /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/UDP4-2_callDMR_Sorted.bedGraph /share/lasallelab/Oran/dovetail/luhmes/methylation/bedToBigBed/hg19.chrom.sizes /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/UDP4-2/DMA/UDP4-2_callDMR_Sorted.bw
+
 
 #To view bw files just upload to bioshare, copy link, and create track hub on UCSC genome browser 
 

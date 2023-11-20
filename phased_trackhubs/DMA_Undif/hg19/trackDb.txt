@@ -1,0 +1,27 @@
+track Undifferentiated_LUHMES_DMA
+container multiWig
+shortLabel Undifferentiated PvM
+longLabel Differential Methylation Analysis Paternal vs Maternal LUHMES Undifferentiated 2 replicates stacked
+type bigWig 0 1
+viewLimits -200:200
+visibility full
+maxHeightPixels 200:150:10
+aggregate transparentOverlay
+showSubtrackColorOnUi on
+configurable on
+
+track DMA_Paternal_vs_Maternal_UDP4-2
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-2/UDP4-2_callDMR_Sorted.bw
+shortLabel DMA_UDP4-2
+longLabel Differential Methylation Analysis Paternal vs Maternal for Undifferentiated LUHMES Passage 4 Replicate 2
+parent Undifferentiated_LUHMES_DMA
+type bigWig
+color 102,102,255
+
+track DMA_Paternal_vs_Maternal_UDP4-3
+bigDataUrl https://bioshare.bioinformatics.ucdavis.edu/bioshare/download/4jo97m7umuy7a9a/Nanopore/phasing/UDP4-3/UDP4-3_callDMR_Sorted.bw
+shortLabel DMA_UDP4-3
+longLabel Differential Methylation Analysis Paternal vs Maternal for Undifferentiated LUHMES Passage 4 Replicate 3
+parent Undifferentiated_LUHMES_DMA
+type bigWig
+color 255,102,255
