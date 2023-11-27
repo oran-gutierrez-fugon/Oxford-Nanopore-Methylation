@@ -1,0 +1,51 @@
+
+export LOUPE_SERVER=/share/lasallelab/Oran/10xSNPS/LUHMESgatk/outs
+/share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/clair3/loupe-2.1.1/start_loupe.sh
+
+
+ssh -L 3001:localhost:3001 fugon@epigenerate.genomecenter.ucdavis.edu "LOUPE_PORT=3001 LOUPE_SERVER=/share/lasallelab/Oran/10xSNPS/LUHMESgatk/outs /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/clair3/loupe-2.1.1/start_loupe.sh"
+
+
+samtools merge /share/lasallelab/Oran/dovetail/luhmes/RNAseq/Undif-RNA-cat.bam /share/lasallelab/Oran/dovetail/luhmes/RNAseq/U1A_S77_L004/U1A_S77_L004_Aligned.sortedByCoord.out.bam /share/lasallelab/Oran/dovetail/luhmes/RNAseq/U2A_S78_L004/U2A_S78_L004_Aligned.sortedByCoord.out.bam /share/lasallelab/Oran/dovetail/luhmes/RNAseq/U3A_S79_L004/U3A_S79_L004_Aligned.sortedByCoord.out.bam
+
+samtools merge /share/lasallelab/Oran/dovetail/luhmes/RNAseq/Neurons-RNA-cat.bam /share/lasallelab/Oran/dovetail/luhmes/RNAseq/N1A_S80_L004/N1A_S80_L004_Aligned.sortedByCoord.out.bam /share/lasallelab/Oran/dovetail/luhmes/RNAseq/N2A_S81_L004/N2A_S81_L004_Aligned.sortedByCoord.out.bam /share/lasallelab/Oran/dovetail/luhmes/RNAseq/N3A_S82_L004/N3A_S82_L004_Aligned.sortedByCoord.out.bam
+
+
+wget --timestamping 'ftp://hgdownload.soe.ucsc.edu/goldenPath/hg38/liftOver/hg38ToHg19.over.chain.gz' -O hg38ToHg19.over.chain.gz
+conda activate datamash
+
+pip3 install crossmap
+
+CrossMap.py bam -a /share/lasallelab/Oran/dovetail/luhmes/RNAseq/crossmap/data/hg19ToHg18.over.chain.gz /share/lasallelab/Oran/dovetail/luhmes/RNAseq/U1A_S77_L004/U1A_S77_L004_Aligned.sortedByCoord.out.bam /share/lasallelab/Oran/dovetail/luhmes/RNAseq/U1A_S77_L004/U1A_S77_L004_Aligned.sortedByCoord.out-hg19.bam
+
+
+
+Steven E. Pierce, Trevor Tyson, Alix Booms, Jordan Prahl, Gerhard A. Coetzee,
+Parkinson's disease genetic risk in a midbrain neuronal cell line,
+Neurobiology of Disease,
+Volume 114,
+2018,
+Pages 53-64,
+ISSN 0969-9961,
+https://doi.org/10.1016/j.nbd.2018.02.007
+
+
+[ download file from downloads page ]
+$ tar -xzvf loupe-linux-2.1.1.tar.gz
+$ cd loupe
+$ export LOUPE_SERVER=/mnt/loupe
+$ ./start_loupe.sh
+
+ssh -L 3001:localhost:3001 fugon@epigenerate.genomecenter.ucdavis.edu "LOUPE_PORT=3001 LOUPE_SERVER=/share/lasallelab/Oran/10xSNPS/LUHMESgatk/outs /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/clair3/loupe-2.1.1/start_loupe.sh"
+
+Then, go to localhost:3001 in your web browser to access Loupe
+
+
+Downloads$ ssh -L 3001:localhost:3001 fugon@epigenerate.genomecenter.ucdavis.edu "LOUPE_PORT=3001 LOUPE_SERVER=/share/lasallelab/Oran/10xSNPS/LUHMESgatk/outs /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/clair3/loupe-2.1.1/start_loupe.sh"
+fugon@epigenerate.genomecenter.ucdavis.edu's password: 
+LOOKING FOR GLS AT: /share/lasallelab/Oran/dovetail/luhmes/methylation/phasing/NP4-3/clair3/loupe-2.1.1/10x-loupe/node/bin/gls
+Welcome to Loupe. Copyright (c) 2016 10x Genomics, Inc. All rights reserved.
+By opening a file in Loupe, you are agreeing to the terms at software.10xgenomics.com/license.
+
+Please direct your web browser to http://epigenerate:3001
+Startup complete.
